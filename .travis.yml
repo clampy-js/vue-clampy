@@ -1,0 +1,19 @@
+language: node_js
+branches:
+  only:
+    - master
+    - /^greenkeeper/.*$/
+cache:
+  yarn: true
+  directories:
+    - node_modules
+notifications:
+  email: false
+node_js:
+  - '9.5'
+before_script:
+  - npm prune
+script:
+  - npm run build
+after_success:
+  - npm run semantic-release
