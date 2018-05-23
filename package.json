@@ -50,5 +50,8 @@
     "build": "rollup -c",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
