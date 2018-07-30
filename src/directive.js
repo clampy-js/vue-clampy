@@ -2,16 +2,15 @@ import * as clampy_ from '@clampy-js/clampy/dist/clampy.umd.js';
 // import * as elementResizeDetectorMaker_ from 'element-resize-detector';
 
 // https://github.com/rollup/rollup/issues/670#issuecomment-284621537
-const clampy = (clampy_).default || clampy_;
+const clampy = clampy_.default || clampy_;
 // const elementResizeDetectorMaker = (elementResizeDetectorMaker_).default || elementResizeDetectorMaker_;
 
 // const resizeDetector = elementResizeDetectorMaker({ strategy: 'scroll' });
-var initialContent;
 var clampValue;
 
 function setInitialContent(el) {
-  if (initialContent === undefined) {
-    initialContent = el.innerHTML.trim();
+  if (el.clampInitialContent === undefined) {
+    el.clampInitialContent = el.innerHTML.trim();
   }
 }
 
@@ -27,8 +26,8 @@ function clampElement(el, clamp) {
 
   setInitialContent(el);
 
-  if (initialContent !== undefined) {
-    el.innerHTML = initialContent;
+  if (el.clampInitialContent !== undefined) {
+    el.innerHTML = el.clampInitialContent;
   }
 
   const options = {
@@ -37,7 +36,7 @@ function clampElement(el, clamp) {
     // Clampy will try to use native clamp if available in the browser
     // however this can leads to unexpected results so we need to explicitely
     // disable it.
-    useNativeClamp: false,
+    useNativeClamp: false
   };
 
   // Set the opactity to 0 to avoid content to flick when clamping.
@@ -81,5 +80,5 @@ export default {
     window.removeEventListener('resize', () => {
       clampElement(el, clampValue);
     });
-  },
+  }
 };

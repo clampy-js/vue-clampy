@@ -294,12 +294,11 @@ var clampy = clampy_umd$1 || clampy_;
 // const elementResizeDetectorMaker = (elementResizeDetectorMaker_).default || elementResizeDetectorMaker_;
 
 // const resizeDetector = elementResizeDetectorMaker({ strategy: 'scroll' });
-var initialContent;
 var clampValue;
 
 function setInitialContent(el) {
-  if (initialContent === undefined) {
-    initialContent = el.innerHTML.trim();
+  if (el.clampInitialContent === undefined) {
+    el.clampInitialContent = el.innerHTML.trim();
   }
 }
 
@@ -315,8 +314,8 @@ function clampElement(el, clamp) {
 
   setInitialContent(el);
 
-  if (initialContent !== undefined) {
-    el.innerHTML = initialContent;
+  if (el.clampInitialContent !== undefined) {
+    el.innerHTML = el.clampInitialContent;
   }
 
   var options = {
