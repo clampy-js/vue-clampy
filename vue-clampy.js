@@ -370,15 +370,40 @@ var VueClampy$1 = {
   }
 };
 
-var install = function install(Vue, options) {
-    if (options) setDefaults(options);
-    Vue.directive("clampy", VueClampy$1);
-    Vue.prototype.$clampy = VueClampy$1.clampy;
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
 };
 
-if (typeof window !== "undefined" && window.Vue) {
-    window.VueClampy = VueClampy$1;
-    Vue.use(install);
+var defaults = {
+  clamp: 'auto',
+  truncationChar: '…',
+  splitOnChars: ['.', '-', '–', '—', ' ']
+};
+
+function setDefaults(options) {
+  defaults = _extends({}, defaults, options);
+}
+
+var install = function install(Vue, options) {
+  if (options) setDefaults(options);
+  Vue.directive('clampy', VueClampy$1);
+  Vue.prototype.$clampy = VueClampy$1.clampy;
+};
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.VueClampy = VueClampy$1;
+  window.VueClampy.setDefaults = setDefaults;
+  Vue.use(install);
 }
 
 VueClampy$1.install = install;
