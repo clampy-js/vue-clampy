@@ -8,6 +8,32 @@ const clampy = clampy_.default || clampy_;
 // const resizeDetector = elementResizeDetectorMaker({ strategy: 'scroll' });
 var clampValue;
 
+var _extends = Object.assign ||
+  function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+var defaults = {
+  clamp: 'auto',
+  truncationChar: '…',
+  splitOnChars: ['.', '-', '–', '—', ' '],
+  useNativeClamp: false
+};
+
+export function setDefaults(options) {
+  defaults = _extends({}, defaults, options);
+}
+
 function setInitialContent(el) {
   if (el.clampInitialContent === undefined) {
     el.clampInitialContent = el.innerHTML.trim();
@@ -30,18 +56,11 @@ function clampElement(el, clamp) {
     el.innerHTML = el.clampInitialContent;
   }
 
-  const options = {
-    clamp: clamp ? clamp : 'auto',
-    truncationChar: '…',
-    // Clampy will try to use native clamp if available in the browser
-    // however this can leads to unexpected results so we need to explicitely
-    // disable it.
-    useNativeClamp: false
-  };
+  defaults = _extends({}, defaults, { clamp: clamp ? clamp : 'auto' });
 
   // Set the opactity to 0 to avoid content to flick when clamping.
   el.style.opacity = '0';
-  const result = clampy.clamp(el, options);
+  const result = clampy.clamp(el, defaults);
 
   // Set the opacity back to 1 now that the content is clamped.
   el.style.opacity = '1';
