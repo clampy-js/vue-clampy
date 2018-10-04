@@ -327,6 +327,10 @@ function setInitialContent(el) {
   }
 }
 
+function clampOnResize(el, clampValue) {
+  clampElement(el, clampValue);
+}
+
 function clampElement(el, clamp) {
   // We use element-resize-detector to trigger the ellipsis.
   // Element-resize-detector adds an inner div to monitor
@@ -345,7 +349,7 @@ function clampElement(el, clamp) {
 
   defaults = _extends({}, defaults, { clamp: clamp ? clamp : 'auto' });
 
-  // Set the opactity to 0 to avoid content to flick when clamping.
+  // Set the opacity to 0 to avoid content to flick when clamping.
   el.style.opacity = '0';
   var result = clampy.clamp(el, defaults);
 
@@ -366,9 +370,7 @@ var VueClampy$1 = {
     // });
 
     // Also re-clamp on window resize
-    window.addEventListener('resize', function () {
-      clampElement(el, clampValue);
-    });
+    window.addEventListener('resize', clampOnResize);
 
     clampElement(el, clampValue);
   },
@@ -381,9 +383,7 @@ var VueClampy$1 = {
 
     // Remove all listeners
     // resizeDetector.removeAllListeners(el);
-    window.removeEventListener('resize', function () {
-      clampElement(el, clampValue);
-    });
+    window.removeEventListener('resize', clampOnResize);
   }
 };
 
