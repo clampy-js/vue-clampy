@@ -321,14 +321,40 @@ function setDefaults(options) {
   defaults = _extends({}, defaults, options);
 }
 
+function setup(el, clampValue) {
+  tearDown(el);
+
+  var resizeListener = function resizeListener() {
+    clampElement(el, clampValue);
+  };
+
+  el.__VueClampy = {
+    clampValue: clampValue,
+    resizeListener: resizeListener
+  };
+
+  // Re-clamp on element resize
+  // resizeDetector.listenTo(el, () => {
+  //   clampElement(el, clampValue);
+  // });
+
+  // Also re-clamp on window resize
+  window.addEventListener('resize', resizeListener);
+
+  clampElement(el, clampValue);
+}
+
+function tearDown(el) {
+  if (!el || !el.__VueClampy) return;
+  // Remove all listeners
+  // resizeDetector.removeAllListeners(el);
+  window.removeEventListener('resize', el.__VueClampy.resizeListener);
+}
+
 function setInitialContent(el) {
   if (el.clampInitialContent === undefined) {
     el.clampInitialContent = el.innerHTML.trim();
   }
-}
-
-function clampOnResize(el, clampValue) {
-  clampElement(el, clampValue);
 }
 
 function clampElement(el, clamp) {
@@ -364,26 +390,15 @@ function clampElement(el, clamp) {
 var VueClampy$1 = {
   inserted: function inserted(el, binding, vnode) {
     clampValue = binding.value;
-    // Re-clamp on element resize
-    // resizeDetector.listenTo(el, () => {
-    //   clampElement(el, clampValue);
-    // });
-
-    // Also re-clamp on window resize
-    window.addEventListener('resize', clampOnResize);
-
-    clampElement(el, clampValue);
+    setup(el, clampValue);
   },
   update: function update(el, binding, vnode) {
     clampValue = binding.value;
-    clampElement(el, clampValue);
+    setup(el, clampValue);
   },
   unbind: function unbind(el, binding, vnode) {
-    clampValue = binding.value;
-
-    // Remove all listeners
-    // resizeDetector.removeAllListeners(el);
-    window.removeEventListener('resize', clampOnResize);
+    tearDown(el);
+    delete el.__VueClampy;
   }
 };
 
