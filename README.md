@@ -18,7 +18,7 @@ npm install @clampy-js/vue-clampy
 ```
 
 ```
-yarn install @clampy-js/vue-clampy
+yarn add @clampy-js/vue-clampy
 ```
 
 #### Usage
